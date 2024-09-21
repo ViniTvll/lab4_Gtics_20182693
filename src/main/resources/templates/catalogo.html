@@ -1,13 +1,109 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bootstrap demo</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Catálogo de Flores</title>
+  <style>
+    .navbar-brand img {
+      width: 30px;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
-<h1>Hello, world!</h1>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="@{/}"><img src="logo.png" alt="Logo"></a>
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="catalogo.html">Catálogo</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="entretenimiento.html">Entretenimiento</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="carrito.html">Carrito</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container mt-5">
+  <h1 class="text-center">Catálogo de Flores</h1>
+
+  <div class="mb-4">
+    <form th:action="@{/filtrar}" method="post" class="form-inline justify-content-center">
+      <div class="form-group mx-2">
+        <select name="color" class="form-control">
+          <option value="">Selecciona Color</option>
+          <option value="rojo">Rojos(as)</option>
+          <option value="verde">Verdes</option>
+          <option value="azul">Azules</option>
+          <option value="blanco">Blancos(as)</option>
+          <option value="amarillo">Amarillos(as)</option>
+        </select>
+      </div>
+      <div class="form-group mx-2">
+        <select name="tipo" class="form-control">
+          <option value="">Selecciona Tipo</option>
+          <option value="rosa">Rosa(s)</option>
+          <option value="clavel">Clavel(es)</option>
+          <option value="hortencia">Hortencia(s)</option>
+          <option value="girasol">Girasol(es)</option>
+          <option value="tulipan">Tulipán(es)</option>
+        </select>
+      </div>
+      <div class="form-group mx-2">
+        <select name="ocasion" class="form-control">
+          <option value="">Selecciona Ocasión</option>
+          <option value="primavera">Primavera</option>
+          <option value="san_valentin">San Valentín</option>
+          <option value="aniversario">Aniversario</option>
+          <option value="dia_amistad">Día de la Amistad</option>
+          <option value="dia_padre">Día del Padre</option>
+          <option value="dia_madre">Día de la Madre</option>
+          <option value="condolencias">Condolencias</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+  </div>
+
+  <div class="mb-3">
+    <h3>Número total de flores: <span th:text="${totalFlores}"></span></h3>
+  </div>
+
+  <div class="row">
+    <div th:each="flor : ${florList}" class="col-md-4 mb-4">
+      <div class="card">
+        <img th:src="@{${flor.imagen}}" class="card-img-top" alt="Imagen de la flor" />
+        <div class="card-body">
+          <h5 class="card-title" th:text="${flor.nombre}"></h5>
+          <p class="card-text" th:text="${flor.descripcion}"></p>
+          <p class="card-text"><strong th:text="${flor.precio} + ' €'"></strong></p>
+          <form th:action="@{/flores/agregarCarrito}" method="post" class="d-inline">
+            <input type="hidden" name="id" th:value="${flor.id_Flor}" />
+            <button type="submit" class="btn btn-success">Agregar al Carrito</button>
+          </form>
+          <form th:action="@{/flores/quitarCarrito}" method="post" class="d-inline">
+            <input type="hidden" name="id" th:value="${flor.idFlor}" />
+            <button type="submit" class="btn btn-danger">Quitar del Carrito</button>
+          </form>
+          <form th:action="@{/flores/comprar}" method="post" class="d-inline">
+            <input type="hidden" name="id" th:value="${flor.idFlor}" />
+            <button type="submit" class="btn btn-warning">Comprar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
